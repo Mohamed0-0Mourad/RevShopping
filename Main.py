@@ -1,16 +1,15 @@
 import Network
 import Search
 import matplotlib.pyplot as plt
-import networkx as nx
+import math
 
 result = Search.products("Macbook M3")
+shopp_res = result["shopping_results"]
+sources, cnt = Search.uniq_sources(shopp_res)
+nodes2edges = Network.get_nodes_edges(shopp_res)   
 
-nodes, edges= Network.get_nodes_edges(result)
-G = Network.graph_gen(nodes, edges)
+for src_ct in range(len(nodes2edges)):
+    mapp = nodes2edges[src_ct]
+    Gi = Network.graph_obj(mapp)
+    Network.draw_G(Gi, mapp[0])
 
-plt.clf()
-nx.draw_networkx(G, with_labels = True)
-ax = plt.gca()
-ax.margins(0.20)
-plt.axis(False)
-plt.show()

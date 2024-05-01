@@ -1,36 +1,47 @@
 import networkx as nx 
+import matplotlib.pyplot as plt
+from Search import uniq_sources
 
-def get_nodes_edges(results: dict)-> list:
-    shopping_r = results["shopping_results"] 
+def get_nodes_edges(shopping_r: dict)-> list:    
     relations = {}
-    nodes = list()
-    # sizes = list()
+    
     for result in shopping_r:
         node = result["source"]
-        p = f"{result['position']}. {result['price']}"
-
-        nodes.append(node)#; sizes.append(5) 
-        nodes.append(p)#; sizes.append(8)
+        p = f"{result['position']}. " + "{:,}".format(result['extracted_price']) + " EGP"
         try:
-          relations[node].append(p)
+            relations[node].append(p)
         except KeyError:
-          relations[node] = []
+            relations[node] = []
     
-    edges = []
-    for node in relations:
-        for edge in relations[node]:
-            edges.append((node, edge))
-    
-    return nodes, edges, #sizes
+    node2edges = list(relations.items())
 
-def graph_gen(nodes: list, edges:list)-> nx.graph:
-  G = nx.Graph()
-  
-  for node in nodes:
-    if node.isalpha():
-      G.add_node(node, size = 50, color = 'red', community = "Sites")
-    else: 
-      G.add_node(node, size = 70, color = 'blue', community = "Prices")
-  
-  G.add_edges_from(edges)
-  return G
+    # edges = []
+    # for node in relations:
+    #     for edge in relations[node]:
+    #         edges.append((node, edge))
+    
+    return node2edges#, edges#, sizes
+
+def graph_obj(mapp: tuple)-> nx.graph: 
+    node = mapp[0]
+    prods = mapp[1]
+    G = nx.Graph()
+    G.add_node(node, size = 2400, color = 'red', community = "Sites")
+    
+    for edge in prods:
+        G.add_node(edge, size = 3800, color = 'blue', community = "Prices", font_weight = "bold")
+        G.add_edge(node, edge, width = 1000)
+    return G
+
+def draw_G(G: nx.graph, centeral_node: str):
+    colors = [node_data["color"] for node, node_data in G.nodes(data=True)]
+    sizes = [node_data["size"] for node, node_data in G.nodes(data=True)]
+
+    plt.clf()
+    nx.draw(G, with_labels = True, node_color=colors, node_size = sizes)
+    x = plt.gca()
+    x.set_facecolor("#2FBECF")
+    x.margins(0.20)
+    plt.axis(False)
+    plt.savefig(f"{centeral_node}.png")
+    plt.show()

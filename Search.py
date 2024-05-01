@@ -4,7 +4,7 @@ def products(product: str, location: str = "eg"):
     if len(location) != 2:
       print("Sorry the location should be two characters according to Google countries abbreviation")
       return
-    
+
     params = {
     "engine": "google_shopping",
     "q": product,
@@ -22,3 +22,12 @@ def get_title_abbrv(title: str, query:str):
     ret = " ".join(list(t))
     # t = " ".join(title[0:len(query)])
     return ret
+
+def uniq_sources(shopping_results: dict)-> list:
+    sources = list()
+   
+    for result in shopping_results:
+        sources.append(result['source'])
+    
+    sources = set(sources)
+    return list(sources), len(sources)
