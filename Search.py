@@ -26,8 +26,11 @@ def get_title_abbrv(title: str, query:str):
 def uniq_sources(shopping_results: dict)-> list:
     sources = list()
    
-    for result in shopping_results:
-        sources.append(result['source'])
-    
+    for i, result in enumerate(shopping_results):
+        try:
+            sources.append(result['source'])
+        except KeyError:
+            del shopping_results[i]
+            continue
     sources = set(sources)
     return list(sources), len(sources)

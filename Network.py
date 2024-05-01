@@ -1,45 +1,72 @@
 import networkx as nx 
 import matplotlib.pyplot as plt
-from Search import uniq_sources
 
 def get_nodes_edges(shopping_r: dict)-> list:    
     relations = {}
+    all_weights = []
     
+    i= -1
     for result in shopping_r:
         node = result["source"]
         p = f"{result['position']}. " + "{:,}".format(result['extracted_price']) + " EGP"
+        
+        try:
+            rate = result["rating"]
+            num_reviews = result['reviews']
+        except KeyError:
+            rate = 0.1
+            num_reviews = 1
+
         try:
             relations[node].append(p)
+            i = list(relations.keys()).index(node)
+            all_weights[i].append(rate*num_reviews)
         except KeyError:
             relations[node] = []
+            relations[node].append(p)
+            all_weights.append(list())
+            i= len(relations) -1
+            all_weights[i].append(rate/num_reviews)
     
     node2edges = list(relations.items())
-
-    # edges = []
-    # for node in relations:
-    #     for edge in relations[node]:
-    #         edges.append((node, edge))
     
-    return node2edges#, edges#, sizes
+    return node2edges, all_weights
 
-def graph_obj(mapp: tuple)-> nx.graph: 
+def graph_obj(mapp: tuple, weights:list)-> nx.graph: 
     node = mapp[0]
     prods = mapp[1]
-    G = nx.Graph()
-    G.add_node(node, size = 2400, color = '#7E70AD', community = "Sites")
+    G = nx.Graph()   
+    G.add_node(node, size = 2400, color = '#7E70AD', font_weight = "bold")
     
-    for edge in prods:
-        G.add_node(edge, size = 3800, color = '#56BF81', community = "Prices", font_weight = "bold")
+    for i, edge in enumerate(prods):
+        G.add_node(edge, size = 3800, color = '#56BF81', edge_weight = weights[i])
         G.add_edge(node, edge, width = 3000)
     return G
 
-def draw_G(G: nx.graph, centeral_node: str):
+def norm(weights)->list:
+    normalized = []
+    mini = min(weights)
+    maxi = max(weights)
+    deno = maxi-mini
+    if deno == 0: return weights
+
+    for weight in weights:
+        normalized.append((weight - mini)/deno)
+    return normalized
+
+def draw_G(G: nx.graph, centeral_node: str, weights: list):
     colors = [node_data["color"] for node, node_data in G.nodes(data=True)]
     sizes = [node_data["size"] for node, node_data in G.nodes(data=True)]
+    # weights = [G.get_edge_data(edge[0], edge[1], default={"weight": None})["weight"] for edge in G.edges]
+    # fonts = [node_data["font_weight"] for node, node_data in G.nodes(data=True)]
+
+    pos = nx.spring_layout(G, seed= 200)   #https://networkx.org/documentation/stable/auto_examples/drawing/plot_edge_colormap.html#sphx-glr-auto-examples-drawing-plot-edge-colormap-py
+    cmap = plt.cm.RdYlGn
+    normalized = norm(weights)
 
     plt.clf()
     plt.plot(color = "#56BF81")
-    nx.draw(G, with_labels = True, node_color=colors, node_size = sizes)
+    nx.draw_networkx(G, node_color=colors, pos = pos, node_size = sizes, font_weight = "bold", edge_color = cmap(normalized), width = [(1+norm) for norm in normalized])
     x = plt.gca()
     x.margins(0.20)
     plt.axis(False)
