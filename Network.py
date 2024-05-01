@@ -60,7 +60,7 @@ def draw_G(G: nx.graph, centeral_node: str, weights: list):
     # weights = [G.get_edge_data(edge[0], edge[1], default={"weight": None})["weight"] for edge in G.edges]
     # fonts = [node_data["font_weight"] for node, node_data in G.nodes(data=True)]
 
-    pos = nx.spring_layout(G, seed= 200)   #https://networkx.org/documentation/stable/auto_examples/drawing/plot_edge_colormap.html#sphx-glr-auto-examples-drawing-plot-edge-colormap-py
+    pos = nx.spring_layout(G, seed= 300)   #https://networkx.org/documentation/stable/auto_examples/drawing/plot_edge_colormap.html#sphx-glr-auto-examples-drawing-plot-edge-colormap-py
     cmap = plt.cm.RdYlGn
     normalized = norm(weights)
 
