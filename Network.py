@@ -26,11 +26,11 @@ def graph_obj(mapp: tuple)-> nx.graph:
     node = mapp[0]
     prods = mapp[1]
     G = nx.Graph()
-    G.add_node(node, size = 2400, color = 'red', community = "Sites")
+    G.add_node(node, size = 2400, color = '#7E70AD', community = "Sites")
     
     for edge in prods:
-        G.add_node(edge, size = 3800, color = 'blue', community = "Prices", font_weight = "bold")
-        G.add_edge(node, edge, width = 1000)
+        G.add_node(edge, size = 3800, color = '#56BF81', community = "Prices", font_weight = "bold")
+        G.add_edge(node, edge, width = 3000)
     return G
 
 def draw_G(G: nx.graph, centeral_node: str):
@@ -38,9 +38,9 @@ def draw_G(G: nx.graph, centeral_node: str):
     sizes = [node_data["size"] for node, node_data in G.nodes(data=True)]
 
     plt.clf()
+    plt.plot(color = "#56BF81")
     nx.draw(G, with_labels = True, node_color=colors, node_size = sizes)
     x = plt.gca()
-    x.set_facecolor("#2FBECF")
     x.margins(0.20)
     plt.axis(False)
     plt.savefig(f"{centeral_node}.png")
