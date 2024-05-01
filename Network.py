@@ -43,7 +43,7 @@ def graph_obj(mapp: tuple, weights:list)-> nx.graph:
         G.add_edge(node, edge, width = 3000)
     return G
 
-def norm(weights)->list:
+def norm(weights: list)->list:
     normalized = []
     mini = min(weights)
     maxi = max(weights)
@@ -66,7 +66,7 @@ def draw_G(G: nx.graph, centeral_node: str, weights: list):
 
     plt.clf()
     plt.plot(color = "#56BF81")
-    nx.draw_networkx(G, node_color=colors, pos = pos, node_size = sizes, font_weight = "bold", edge_color = cmap(normalized), width = [(1+norm) for norm in normalized])
+    nx.draw_networkx(G, node_color=colors, pos = pos, node_size = sizes, font_weight = "bold", font_size = 10, edge_color = cmap(normalized), width = [(5+norm) for norm in normalized])
     x = plt.gca()
     x.margins(0.20)
     plt.axis(False)

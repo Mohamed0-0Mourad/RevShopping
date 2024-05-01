@@ -2,7 +2,7 @@ import Network
 import Search
 import matplotlib.pyplot as plt
 
-result = Search.products("Macbook M3")
+result = Search.products("Samsung A15")
 shopp_res = result["shopping_results"]
 sources, cnt = Search.uniq_sources(shopp_res)
 nodes2edges, weights = Network.get_nodes_edges(shopp_res)   
