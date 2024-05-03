@@ -1,8 +1,36 @@
 import Network
 import Search
 import matplotlib.pyplot as plt
+import tkinter as tk
 
-result = Search.products("Samsung A15")
+# root = tk.Tk()
+# root.title("RevShopping")
+
+# frm = tk.Frame(root, relief= "ridge", padx=10, pady=10)
+# frm.grid()
+
+# labl = tk.Label(frm, text= "Search a product: ")
+# labl.grid(column=249, row = 149)
+
+# # global q, entry
+# q = tk.StringVar()
+
+# def inp():
+#     q = entry.get()
+#     print(f"Searching {q}")
+
+# entry = tk.Entry(frm, textvariable= q, width= 40)
+# entry.grid(column=250, row=150)       #https://tkdocs.com/widgets/entry.html, https://tkdocs.com/tutorial/widgets.html#entry
+
+# btn = tk.Button(frm, text="Search!", command= inp)
+# btn.grid(column=499, row= 299)
+
+# root.mainloop()           #https://docs.python.org/3/library/tkinter.html#entry
+# print(f"Input {q}")
+
+q ="Samsung A15"
+
+result = Search.products(q)
 shopp_res = result["shopping_results"]
 sources, cnt = Search.uniq_sources(shopp_res)
 nodes2edges, weights = Network.get_nodes_edges(shopp_res)   
