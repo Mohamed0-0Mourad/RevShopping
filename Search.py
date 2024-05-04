@@ -1,4 +1,7 @@
 from serpapi import GoogleSearch
+import requests 
+from bs4 import BeautifulSoup
+import json
 
 def products(product: str, location: str = "eg"):
     if len(location) != 2:
@@ -34,3 +37,15 @@ def uniq_sources(shopping_results: dict)-> list:
             continue
     sources = set(sources)
     return list(sources), len(sources)
+
+def get_reviews()-> dict:
+    r = requests.get("https://btech.com/en/apple-iphone-13-128gb-4gb-blue-jap.html")
+
+    content = BeautifulSoup(r.content, "html5lib")
+
+    allRev = content.select("div.reviews-show-more-button.btn-outline.primary.medium")
+    link = allRev[0]['data-review-next-page-url']
+
+    r2 = requests.get(link)
+    js2dict = r2.json()
+    return js2dict

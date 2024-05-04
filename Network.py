@@ -71,4 +71,4 @@ def draw_G(G: nx.graph, centeral_node: str, weights: list):
     x.margins(0.20)
     plt.axis(False)
     plt.savefig(f"{centeral_node}.png")
-    plt.show()
+    # plt.show()

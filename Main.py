@@ -2,6 +2,7 @@ import Network
 import Search
 import matplotlib.pyplot as plt
 import tkinter as tk
+import Map
 
 # root = tk.Tk()
 # root.title("RevShopping")
@@ -39,3 +40,9 @@ for src_ct in range(len(nodes2edges)):
     mapp = nodes2edges[src_ct]
     Gi = Network.graph_obj(mapp, weights[src_ct])
     Network.draw_G(Gi, mapp[0], weights[src_ct])
+
+# Mapping
+reviews = Search.get_reviews()
+
+analysis = Map.analys(reviews)
+
