@@ -38,7 +38,10 @@ def uniq_sources(shopping_results: dict)-> list:
     sources = set(sources)
     return list(sources), len(sources)
 
-def get_reviews()-> dict:
+def get_reviews(url:str)-> dict:
+    if url == '':
+        print("Sorry, We couldn't get reviews because the product you are searching is not on B.TECH.")
+        return
     r = requests.get("https://btech.com/en/apple-iphone-13-128gb-4gb-blue-jap.html")
 
     content = BeautifulSoup(r.content, "html5lib")

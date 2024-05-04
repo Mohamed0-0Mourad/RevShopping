@@ -5,9 +5,12 @@ def get_nodes_edges(shopping_r: dict)-> list:
     relations = {}
     all_weights = []
     
+    BtechURL = ""
     i= -1
     for result in shopping_r:
         node = result["source"]
+        if node == "B.TECH":
+            BtechURL = result['link']
         p = f"{result['position']}. " + "{:,}".format(result['extracted_price']) + " EGP"
         
         try:
@@ -30,7 +33,7 @@ def get_nodes_edges(shopping_r: dict)-> list:
     
     node2edges = list(relations.items())
     
-    return node2edges, all_weights
+    return node2edges, all_weights, BtechURL
 
 def graph_obj(mapp: tuple, weights:list)-> nx.graph: 
     node = mapp[0]

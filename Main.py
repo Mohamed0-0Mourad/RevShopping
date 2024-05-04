@@ -34,7 +34,7 @@ q ="Samsung A15"
 result = Search.products(q)
 shopp_res = result["shopping_results"]
 sources, cnt = Search.uniq_sources(shopp_res)
-nodes2edges, weights = Network.get_nodes_edges(shopp_res)   
+nodes2edges, weights, revURL = Network.get_nodes_edges(shopp_res)   
 
 for src_ct in range(len(nodes2edges)):
     mapp = nodes2edges[src_ct]
@@ -42,7 +42,7 @@ for src_ct in range(len(nodes2edges)):
     Network.draw_G(Gi, mapp[0], weights[src_ct])
 
 # Mapping
-reviews = Search.get_reviews()
+reviews = Search.get_reviews(revURL)
 
 analysis = Map.analys(reviews)
 
