@@ -29,7 +29,7 @@ import Map
 # root.mainloop()           #https://docs.python.org/3/library/tkinter.html#entry
 # print(f"Input {q}")
 
-q ="HP 15s-fq5042ne 6L8K2EA"
+q ="Macbook M1"
 
 result = Search.products(q)
 shopp_res = result["shopping_results"]

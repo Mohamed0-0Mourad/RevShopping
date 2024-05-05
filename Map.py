@@ -4,6 +4,7 @@ import plotly
 from plotly.subplots import make_subplots
 import numpy as np
 import pandas as pd
+import Network
 
 def access_dict(analysis: dict, key: str, value: int):
     try:   
@@ -63,7 +64,7 @@ def analys(js2dict: dict, query:str) -> dict:           # ----------------------
         reviews = js2dict['reviews']
 
         # scores = []
-        drop = {query.lower().split()[0],'with', 'phone', 'mobile', "it's", "can't", 'he', 'had', 'not', 'and', 'a', 'the', 'you', 'have',"i'm", 'this', 'these', 'that', 'so', 'be', 'am', 'on', 'is', 'to', 'i', 'my', 'me', 'it', 'of', 'in', 'for', 'was', "hate", "dislike", 'but', 'do', 'not', "don't", 'like', 'love', 'greates', 'fan', 'myself', 'from', 'one', 'few', 'diffrent', 'thing', 'things', '', 'any', "can't", 'see', 'at', 'it'}
+        drop = {query.lower().split()[0],'،','with', 'phone', 'mobile', "it's", "can't", 'he', 'had', 'not', 'and', 'a', 'the', 'you', 'have',"i'm", 'this', 'these', 'that', 'so', 'be', 'am', 'on', 'is', 'to', 'i', 'my', 'me', 'it', 'of', 'in', 'for', 'was', "hate", "dislike", 'but', 'do', 'not', "don't", 'like', 'love', 'greates', 'fan', 'myself', 'from', 'one', 'few', 'diffrent', 'thing', 'things', '', 'any', "can't", 'see', 'at', 'it'}
         negatives = {"hate", "dislike", 'but',"i don't like", "i do not like"}
 
         for rev in reviews:
@@ -76,6 +77,7 @@ def analys(js2dict: dict, query:str) -> dict:           # ----------------------
                                       
         try:
             link = js2dict['next-page-url']
+            link = link.replace('ar', 'en')
             r2 = requests.get(link)
             js2dict = r2.json()
         except KeyError:

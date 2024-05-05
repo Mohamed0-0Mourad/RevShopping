@@ -42,6 +42,8 @@ def get_reviews(url:str)-> dict:
     if url == '':
         print("Sorry, We couldn't get reviews because the product you are searching is not on B.TECH.")
         return
+    url = url.replace('ar', 'en')
+    print(url)
     r = requests.get(url)
 
     content = BeautifulSoup(r.content, "html5lib")
