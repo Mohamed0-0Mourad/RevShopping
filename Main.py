@@ -29,7 +29,7 @@ import Map
 # root.mainloop()           #https://docs.python.org/3/library/tkinter.html#entry
 # print(f"Input {q}")
 
-q ="Samsung A15"
+q ="HP 15s-fq5042ne 6L8K2EA"
 
 result = Search.products(q)
 shopp_res = result["shopping_results"]
@@ -44,5 +44,6 @@ for src_ct in range(len(nodes2edges)):
 # Mapping
 reviews = Search.get_reviews(revURL)
 
-analysis = Map.analys(reviews)
+analysis = Map.analys(reviews, q)
 
+Map.draw_heatmap(analysis)

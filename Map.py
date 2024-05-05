@@ -1,4 +1,9 @@
 import requests
+import plotly.graph_objects as go 
+import plotly
+from plotly.subplots import make_subplots
+import numpy as np
+import pandas as pd
 
 def access_dict(analysis: dict, key: str, value: int):
     try:   
@@ -76,3 +81,26 @@ def analys(js2dict: dict, query:str) -> dict:           # ----------------------
         except KeyError:
             break
     return analysis
+
+def draw_heatmap(analysis:dict):
+    y = pd.Series(analysis.keys())
+    scores = np.array(list(analysis.values()))
+    di = {"Score(ranging from bad - neutral - good)": scores, "Word": y.index}
+# https://plotly.com/python/line-and-scatter/
+# https://plotly.com/python/discrete-color/
+#https://plotly.com/python/builtin-colorscales/
+
+    df = pd.DataFrame(di)
+    bar=dict(
+    title="How much it appeared in reviews",
+    thicknessmode="pixels", thickness=50,
+    lenmode="pixels", len=400,
+    yanchor="top", y=1,
+    ticks="outside", ticksuffix= "Score(ranging from bad - neutral - good)",
+    dtick=5
+    )
+
+    fig = make_subplots(1, 2, shared_yaxes=True, shared_xaxes=True, column_titles=("Product Review Specification (Using Word Score) from B.TECH", "Heatmap (Red: -, Yellow: neutral, Green: +)"))
+    fig.add_trace(go.Scatter(y= y.values, x= scores),row=1, col = 1)
+    fig.add_trace(go.Heatmap(x=scores, y=y.values, z=scores , colorbar=bar, colorscale=plotly.colors.diverging.RdYlGn), row = 1, col=2)
+    fig.show()

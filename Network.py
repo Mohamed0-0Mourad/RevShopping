@@ -5,12 +5,22 @@ def get_nodes_edges(shopping_r: dict)-> list:
     relations = {}
     all_weights = []
     
-    BtechURL = ""
+    BtechURL = []
     i= -1
+    revs = 0
     for result in shopping_r:
         node = result["source"]
         if node == "B.TECH":
-            BtechURL = result['link']
+            try:
+                curr_revs = result['reviews']
+            except KeyError: curr_revs = 0
+
+            if len(BtechURL) >= 1 and  curr_revs> revs:
+                BtechURL = result['link']
+            elif len(BtechURL)==0: 
+                BtechURL.append(result['link'])
+                revs = curr_revs
+        
         p = f"{result['position']}. " + "{:,}".format(result['extracted_price']) + " EGP"
         
         try:
@@ -32,7 +42,11 @@ def get_nodes_edges(shopping_r: dict)-> list:
             all_weights[i].append(rate/num_reviews)
     
     node2edges = list(relations.items())
-    
+    if len(BtechURL) == 0:
+        BtechURL ==""
+    elif len(BtechURL) == 1: 
+        return node2edges, all_weights, BtechURL[0]
+
     return node2edges, all_weights, BtechURL
 
 def graph_obj(mapp: tuple, weights:list)-> nx.graph: 
@@ -73,5 +87,8 @@ def draw_G(G: nx.graph, centeral_node: str, weights: list):
     x = plt.gca()
     x.margins(0.20)
     plt.axis(False)
-    plt.savefig(f"{centeral_node}.png")
+    try:
+        plt.savefig(f"{centeral_node}.png")
+    except OSError:
+        return
     # plt.show()

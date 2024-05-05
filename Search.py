@@ -47,8 +47,11 @@ def get_reviews(url:str)-> dict:
     content = BeautifulSoup(r.content, "html5lib")
 
     allRev = content.select("div.reviews-show-more-button.btn-outline.primary.medium")
-    link = allRev[0]['data-review-next-page-url']
-
+    try:
+        link = allRev[0]['data-review-next-page-url']
+    except IndexError: 
+        print("Sorry! there's no reviews on this product on B.TECH")
+        return
     r2 = requests.get(link)
     js2dict = r2.json()
     return js2dict
