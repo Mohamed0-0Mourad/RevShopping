@@ -98,12 +98,52 @@ analysis = Map.analys(js2dict, 'iphone 13')
 # # fast: from high score, then it must be positive 
 import pandas as pd
 import numpy as np 
-import plotly.express as px
+# import plotly.express as px
 
-axis = pd.Series(analysis.keys())
+y = pd.Series(analysis.keys())
 scores = np.array(list(analysis.values()))
-di = {"Score(ranging from bad - good)": scores, "Word": axis.values}
-df = pd.DataFrame(di)
-fig = px.scatter(df,x = "Score(ranging from negative - positive)", y= "Word", title = "Product Review Specification (Using Word Score) from B.TECH")
-fig.show()
 
+# x_grid = np.arange(min(scores), max(scores), 0.25)
+# y_grid = np.arange(min(y.index), max(y.index), 1)
+# x_mesh, y_mesh = np.meshgrid(x_grid, y_grid)
+
+# z= []
+# for r in range(x_mesh.shape[0]):
+#     z_r = []
+#     for c in range(y_mesh.shape[1]):
+#         for i in range(scores.shape[0]):
+#             if x_mesh[r,c] == scores[i] and y_mesh[r,c] == i:
+#                 z_r.append(scores[i])
+#             else:
+#                 z_r.append(0)
+#     z.append(z_r)
+
+
+di = {"Score(ranging from bad - neutral - good)": scores, "Word": y.index}
+# https://plotly.com/python/line-and-scatter/
+# https://plotly.com/python/discrete-color/
+#https://plotly.com/python/builtin-colorscales/
+
+df = pd.DataFrame(di)
+
+# heat = px.density_heatmap(df, nbinsx=20, nbinsy=20,color_continuous_scale=px.colors.diverging.RdYlGn, x = "Score(ranging from bad - good)", y= "Word", title = "Product Review Specification (Using Word Score) from B.TECH")
+# sct = px.scatter(df, x = "Score(ranging from bad - good)", y= "Word", title = "Product Review Specification (Using Word Score) from B.TECH")
+bar=dict(
+    title="How much it appeared in reviews",
+    thicknessmode="pixels", thickness=50,
+    lenmode="pixels", len=400,
+    yanchor="top", y=1,
+    ticks="outside", ticksuffix= "Score(ranging from bad - neutral - good)",
+    dtick=5
+)
+# heat.show()
+# x_mesh.reshape((x_mesh.shape[0]*x_mesh.shape[1]))
+# y_mesh.reshape((y_mesh.shape[0]*y_mesh.shape[1]))
+
+import plotly.graph_objects as go 
+import plotly
+from plotly.subplots import make_subplots
+fig = make_subplots(1, 2, shared_yaxes=True, shared_xaxes=True, column_titles=("Product Review Specification (Using Word Score) from B.TECH", "Heatmap (Red: -, Yellow: neutral, Green: +)"))
+fig.add_trace(go.Scatter(y= y.values, x= scores),row=1, col = 1)
+fig.add_trace(go.Heatmap(x=scores, y=y.values, z=scores , colorbar=bar, colorscale=plotly.colors.diverging.RdYlGn), row = 1, col=2)
+fig.show()
