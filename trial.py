@@ -12,8 +12,8 @@ link = allRev[0]['data-review-next-page-url']
 r2 = requests.get(link)
 js2dict = r2.json()
 
-Map.analys(js2dict)
-# analysis = dict()
+analysis = Map.analys(js2dict, 'iphone 13')
+# print(analysis)
 # while True:
 #     reviews = js2dict['reviews']
 
@@ -96,3 +96,14 @@ Map.analys(js2dict)
 # print(analysis)
 
 # # fast: from high score, then it must be positive 
+import pandas as pd
+import numpy as np 
+import plotly.express as px
+
+axis = pd.Series(analysis.keys())
+scores = np.array(list(analysis.values()))
+di = {"Score(ranging from bad - good)": scores, "Word": axis.values}
+df = pd.DataFrame(di)
+fig = px.scatter(df,x = "Score(ranging from negative - positive)", y= "Word", title = "Product Review Specification (Using Word Score) from B.TECH")
+fig.show()
+
