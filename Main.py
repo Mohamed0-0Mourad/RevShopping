@@ -1,49 +1,56 @@
 import Network
 import Search
 import matplotlib.pyplot as plt
-import tkinter as tk
 import Map
+import PySimpleGUI as sg
 
-# root = tk.Tk()
-# root.title("RevShopping")
+q = ''
+layout = [  [sg.Text("Search a product: \nIt can be any electronic device.")],
+            [sg.InputText()],
+            [sg.Button('Search'), sg.Button('Exit')] ]
 
-# frm = tk.Frame(root, relief= "ridge", padx=10, pady=10)
-# frm.grid()
 
-# labl = tk.Label(frm, text= "Search a product: ")
-# labl.grid(column=249, row = 149)
+window = sg.Window('RevShopping', layout)
 
-# # global q, entry
-# q = tk.StringVar()
+event, values = window.read()
 
-# def inp():
-#     q = entry.get()
-#     print(f"Searching {q}")
+if event == 'Search':
+    q = values[0]
+    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=15, keep_on_top=True, modal=False)
 
-# entry = tk.Entry(frm, textvariable= q, width= 40)
-# entry.grid(column=250, row=150)       #https://tkdocs.com/widgets/entry.html, https://tkdocs.com/tutorial/widgets.html#entry
+window.close()
 
-# btn = tk.Button(frm, text="Search!", command= inp)
-# btn.grid(column=499, row= 299)
+if q != '':
+    result = Search.products(q)
+    shopp_res = result["shopping_results"]
+    cnt, sources = Search.uniq_sources(shopp_res)
+    nodes2edges, weights, revURL = Network.get_nodes_edges(shopp_res)   
 
-# root.mainloop()           #https://docs.python.org/3/library/tkinter.html#entry
-# print(f"Input {q}")
+    for src_ct in range(len(nodes2edges)):
+        mapp = nodes2edges[src_ct]
+        Gi = Network.graph_obj(mapp, weights[src_ct])
+        Network.draw_G(Gi, mapp[0], weights[src_ct])
 
-q ="Macbook M1"
+    # Mapping
+    reviews = Search.get_reviews(revURL)
+    analysis = Map.analys(reviews, q)
+    # Map.draw_heatmap(analysis)
 
-result = Search.products(q)
-shopp_res = result["shopping_results"]
-sources, cnt = Search.uniq_sources(shopp_res)
-nodes2edges, weights, revURL = Network.get_nodes_edges(shopp_res)   
-
-for src_ct in range(len(nodes2edges)):
-    mapp = nodes2edges[src_ct]
-    Gi = Network.graph_obj(mapp, weights[src_ct])
-    Network.draw_G(Gi, mapp[0], weights[src_ct])
-
-# Mapping
-reviews = Search.get_reviews(revURL)
-
-analysis = Map.analys(reviews, q)
-
-Map.draw_heatmap(analysis)
+    # layout = [  [sg.Text("Product Analysis Done!\n\nChoose from the analysis options below:\n")],
+    #         [sg.Button('Shop-Product Network'), sg.Button('Reviews Sentemint Analysis')], 
+    #         [sg.Button('3D Graph')],
+    #         [sg.Button("Exit")] 
+    #         ]
+    # launchers = sg.Window('RevShopping', layout)
+    # while True:
+        # event, values = window.read()
+        # if event == "Shop-Product Network":
+            # 
+        # if event == "Reviews Sentemint Analysis":
+        # elif event == "3D Graph":
+            # 
+        # elif event == "Exit" or event == sg.WIN_CLOSED:
+            # break
+    
+    # launchers.close()
+Network.plot_networks(sources, cnt)

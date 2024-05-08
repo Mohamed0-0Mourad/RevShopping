@@ -27,23 +27,28 @@ def get_title_abbrv(title: str, query:str):
     return ret
 
 def uniq_sources(shopping_results: dict)-> list:
-    sources = list()
+    sources = []
    
     for i, result in enumerate(shopping_results):
         try:
-            sources.append(result['source'])
+            src = result['source']
         except KeyError:
             del shopping_results[i]
             continue
-    sources = set(sources)
-    return list(sources), len(sources)
+        if src not in sources:
+            sources.append(src)
+        
+    
+    sources = list(sources)
+    num =len(sources)
+
+    return num, sources
 
 def get_reviews(url:str)-> dict:
     if url == '':
         print("Sorry, We couldn't get reviews because the product you are searching is not on B.TECH.")
         return
     url = url.replace('ar', 'en')
-    print(url)
     r = requests.get(url)
 
     content = BeautifulSoup(r.content, "html5lib")
