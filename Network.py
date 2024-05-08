@@ -1,7 +1,6 @@
 import networkx as nx 
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+import plotly.express as px
 import cv2
 
 def get_nodes_edges(shopping_r: dict)-> list:    
@@ -122,4 +121,9 @@ def plot_networks(uniq_sources: list[str], cnt:int):
         plt.subplot(row, col, i+1)
         plt.axis(False)
         plt.imshow(img)
-    plt.show()
+    # plt.show()
+    plt.savefig("network.png", dpi = 300)
+    img = cv2.imread("network.png")
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    fig = px.imshow(img, title= "Shops and thier offered prices")
+    fig.show()
