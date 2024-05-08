@@ -90,7 +90,7 @@ def draw_G(G: nx.graph, centeral_node: str, weights: list):
     x.margins(0.20)
     plt.axis(False)
     try:
-        plt.savefig(f"{centeral_node}.png", dpi = 300)
+        plt.savefig(f"{centeral_node}.png", dpi = 600)
     except OSError:
         return
     # plt.show()
@@ -99,7 +99,7 @@ from math import sqrt, floor, ceil
 def plot_networks(uniq_sources: list[str], cnt:int):
     row = ceil(sqrt(cnt)) +1
     col = floor(sqrt(cnt))
-    print(cnt, row, col)
+    # print(cnt, row, col)
     # fig = make_subplots(rows = row, cols=col, horizontal_spacing=0.1, vertical_spacing=0.1)
     # fig.update_layout(paper_bgcolor="#56BF81")
     
@@ -122,7 +122,7 @@ def plot_networks(uniq_sources: list[str], cnt:int):
         plt.axis(False)
         plt.imshow(img)
     # plt.show()
-    plt.savefig("network.png", dpi = 300)
+    plt.savefig("network.png", dpi = 1200)
     img = cv2.imread("network.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     fig = px.imshow(img, title= "Shops and thier offered prices")

@@ -24,6 +24,7 @@ if q != '':
     cnt, sources = Search.uniq_sources(shopp_res)
     nodes2edges, weights, revURL = Network.get_nodes_edges(shopp_res)   
     layout = [[sg.Text("Product Analysis Done!\n\nChoose from the analysis options below:\n")],
+            [sg.Button("Plots Dashboard")],
             [sg.Button('Shop-Product Network'), sg.Button('Reviews Sentemint Analysis')], 
             [sg.Button('3D Graph')],
             [sg.Button("Exit")] 
