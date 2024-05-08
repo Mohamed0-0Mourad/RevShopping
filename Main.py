@@ -1,3 +1,4 @@
+import Stats
 import Network
 import Search
 import matplotlib.pyplot as plt
@@ -32,7 +33,11 @@ if q != '':
     window = sg.Window('RevShopping', layout)
     while True:
         event, values = window.read()
-        if event == "Shop-Product Network":
+        if event == "Plots Dashboard":
+            df_dict = Stats.stats_dict(shopp_res, weights)
+            Stats.dashboard(df_dict)
+
+        elif event == "Shop-Product Network":
             for src_ct in range(len(nodes2edges)):
                 mapp = nodes2edges[src_ct]
                 Gi = Network.graph_obj(mapp, weights[src_ct])
