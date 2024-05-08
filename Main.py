@@ -17,7 +17,7 @@ event, values = window.read()
 
 if event == 'Search':
     q = values[0]
-    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=15, keep_on_top=True, modal=False)
+    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=5, keep_on_top=True, modal=False)
 
 if q != '':
     result = Search.products(q)
