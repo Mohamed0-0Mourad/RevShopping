@@ -5,7 +5,7 @@ import Map
 import PySimpleGUI as sg
 
 q = ''
-layout = [  [sg.Text("Search a product: \nIt can be any electronic device.")],
+layout = [  [sg.Text("Search a product: \nIt can be any shopping product. \t(for semantic heatmap it must be electronic)")],
             [sg.InputText()],
             [sg.Button('Search'), sg.Button('Exit')] ]
 
@@ -26,7 +26,7 @@ if q != '':
     layout = [[sg.Text("Product Analysis Done!\n\nChoose from the analysis options below:\n")],
             [sg.Button("Plots Dashboard")],
             [sg.Button('Shop-Product Network'), sg.Button('Reviews Sentemint Analysis')], 
-            [sg.Button('3D Graph')],
+            [sg.Button('3D Graph')],['Get product info(by posistion)'],
             [sg.Button("Exit")] 
             ]
     window = sg.Window('RevShopping', layout)

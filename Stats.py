@@ -65,7 +65,7 @@ def stats_dict(shopp_res: list[dict], weights: list ) -> dict:
 
 def dashboard(df_dict: dict):
     df = pd.DataFrame(df_dict)
-    fig = px.bar(df, x= "Position", y = "Price", text_auto= True,color="Source", facet_col="Condition", hover_data=["Title","Discount", "Delivery"])
+    fig = px.bar(df, x= "Position", y = "Price", text_auto= True,color="Source", facet_col="Condition", hover_data=["Title","Discount", "Delivery"], title="Price of each product\n'hover to see the title, discount made, and delivery options'")
     fig.show()
     #, width="Trust(rate*reviews)" ? ?? ? ?
     # https://plotly.com/python/bar-charts/
