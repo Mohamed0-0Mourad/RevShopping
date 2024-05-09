@@ -1,7 +1,6 @@
 import Stats
-import Network
 import Search
-import matplotlib.pyplot as plt
+import Network
 import Map
 import PySimpleGUI as sg
 
