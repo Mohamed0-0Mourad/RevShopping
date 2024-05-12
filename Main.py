@@ -6,31 +6,31 @@ import PySimpleGUI as sg
 import Find 
 
 q = ''
-layout = [  [sg.Text("Search a product: \nIt can be any shopping product. \t(for semantic heatmap it must be electronic)")],
-            [sg.InputText()],
-            [sg.Button('Search'), sg.Button('Exit')] ]
+layout = [  [sg.Text("Search a product: \nIt can be any shopping product. \t(for semantic heatmap it must be electronic)", background_color='#56BF81')],
+            [sg.InputText(size = 70)],
+            [sg.Button('Search', button_color='#7E70AD'), sg.Button('Exit', button_color="red")] ]
 
 
-window = sg.Window('RevShopping', layout)
+window = sg.Window('RevShopping', layout, background_color='#56BF81')
 
 event, values = window.read()
 
 if event == 'Search':
     q = values[0]
-    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=5, keep_on_top=True, modal=False)
+    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=5, keep_on_top=True, modal=False, background_color="#56BF81", button_color="#7E70AD")
 
 if q != '':
     result = Search.products(q)
     shopp_res = result["shopping_results"]
     cnt, sources = Search.uniq_sources(shopp_res)
     nodes2edges, weights, revURL = Network.get_nodes_edges(shopp_res)   
-    layout = [[sg.Text("Product Analysis Done!\n\nChoose from the analysis options below:\n")],
+    layout = [[sg.Text("Product Analysis Done!\n\nChoose from the analysis options below:\n", background_color="#56BF81")],
             [sg.Button("Plots Dashboard")],
             [sg.Button('Shop-Product Network'), sg.Button('Reviews Sentemint Analysis')], 
-            ['Get product link(by position and source)'],
-            [sg.Button("Exit")] 
+            [sg.Button('Get product link(by source)')],
+            [sg.Button("Exit", button_color="red")] 
             ]
-    window = sg.Window('RevShopping', layout)
+    window = sg.Window('RevShopping', layout, background_color="#56BF81", button_color="#7E70AD")
     while True:
         event, values = window.read()
         if event == "Plots Dashboard":
@@ -48,11 +48,16 @@ if q != '':
             reviews = Search.get_reviews(revURL)
             analysis = Map.analys(reviews, q)
             Map.draw_heatmap(analysis)
-        elif event == 'Get product link (by source)':
-            find = sg.popup_get_text()
+
+        elif event == 'Get product link(by source)':
+            find = sg.popup_get_text("Enter Source Name (case sensetive): ", background_color="#56BF81", button_color='#7E70AD')
             df_dict = Find.find_nodes(find, nodes2edges, weights, shopp_res)
-            sg.popup(f"{df_dict["links"]}", title = "Links")
             Find.dashboard(df_dict)
+            out = "Links with respect to order of positions:\n"
+            for i, l in enumerate(df_dict["Links"]):
+                out+=f"{i+1}- {l}"
+                out += '\n\n'
+            sg.popup(out, title = "Links", background_color="#56BF81", button_color='#7E70AD')
         elif event == "Exit" or event == sg.WIN_CLOSED:
             break
 
