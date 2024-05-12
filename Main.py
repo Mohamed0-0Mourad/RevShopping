@@ -3,6 +3,7 @@ import Search
 import Network
 import Map
 import PySimpleGUI as sg
+import Find 
 
 q = ''
 layout = [  [sg.Text("Search a product: \nIt can be any shopping product. \t(for semantic heatmap it must be electronic)")],
@@ -26,7 +27,7 @@ if q != '':
     layout = [[sg.Text("Product Analysis Done!\n\nChoose from the analysis options below:\n")],
             [sg.Button("Plots Dashboard")],
             [sg.Button('Shop-Product Network'), sg.Button('Reviews Sentemint Analysis')], 
-            [sg.Button('3D Graph')],['Get product info(by posistion)'],
+            ['Get product link(by position and source)'],
             [sg.Button("Exit")] 
             ]
     window = sg.Window('RevShopping', layout)
@@ -47,8 +48,11 @@ if q != '':
             reviews = Search.get_reviews(revURL)
             analysis = Map.analys(reviews, q)
             Map.draw_heatmap(analysis)
-        # elif event == "3D Graph":
-
+        elif event == 'Get product link (by source)':
+            find = sg.popup_get_text()
+            df_dict = Find.find_nodes(find, nodes2edges, weights, shopp_res)
+            sg.popup(f"{df_dict["links"]}", title = "Links")
+            Find.dashboard(df_dict)
         elif event == "Exit" or event == sg.WIN_CLOSED:
             break
 

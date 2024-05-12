@@ -23,7 +23,7 @@ def get_nodes_edges(shopping_r: dict)-> list:
                 BtechURL.append(result['link'])
                 revs = curr_revs
         
-        p = f"{result['position']}. " + "{:,}".format(result['extracted_price']) + " EGP"
+        p = f"{result['position']}- " + "{:,}".format(result['extracted_price']) + " EGP"
         
         try:
             rate = result["rating"]
