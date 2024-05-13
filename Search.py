@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-def products(product: str, location: str = "eg"):
+def products(product: str, api_key:str,location: str = "eg"):
     if len(location) != 2:
       print("Sorry the location should be two characters according to Google countries abbreviation")
       return
@@ -13,7 +13,7 @@ def products(product: str, location: str = "eg"):
     "q": product,
     "gl": location,
     "hl": "en",
-    "api_key": "b571bb3042722702eb99ff8deeee9a929f0cf3d893ed9b204423ce72a42f06d6"
+    "api_key": api_key
     }   
     results = GoogleSearch(params).get_dict()
     return results

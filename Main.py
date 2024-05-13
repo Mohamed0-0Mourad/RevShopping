@@ -6,7 +6,10 @@ import PySimpleGUI as sg
 import Find 
 
 q = ''
+api_key = ''
 layout = [  [sg.Text("Search a product: \nIt can be any shopping product. \t(for semantic heatmap it must be electronic)", background_color='#56BF81')],
+            [sg.InputText(size = 70)],
+            [sg.Text("Enter your SerpApi key\nIf you don't have a one head to (https://serpapi.com/users/sign_up) and sign up.", background_color='#56BF81')],
             [sg.InputText(size = 70)],
             [sg.Button('Search', button_color='#7E70AD'), sg.Button('Exit', button_color="red")] ]
 
@@ -17,10 +20,11 @@ event, values = window.read()
 
 if event == 'Search':
     q = values[0]
-    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=5, keep_on_top=True, modal=False, background_color="#56BF81", button_color="#7E70AD")
+    api_key = values[1]
 
-if q != '':
-    result = Search.products(q)
+if q != '' and api_key != '':
+    sg.popup(f'Searching {values[0]}...', no_titlebar=True, auto_close=True, auto_close_duration=5, keep_on_top=True, modal=False, background_color="#56BF81", button_color="#7E70AD")
+    result = Search.products(q, api_key)
     shopp_res = result["shopping_results"]
     cnt, sources = Search.uniq_sources(shopp_res)
     nodes2edges, weights, revURL = Network.get_nodes_edges(shopp_res)   
@@ -62,3 +66,5 @@ if q != '':
             break
 
     window.close()
+else:
+    sg.popup_error("Sorry, one of the feilds has not been filled", title = "Field Error!", background_color='#56BF81')
