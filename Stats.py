@@ -14,6 +14,7 @@ def access_res(res:dict, sources, prices, discounts, delivery, condition):
     sources.append(src)
     try:
         price = res['extracted_price']
+        if price == None: price=0
     except KeyError:
         price = 0
     prices.append(price)

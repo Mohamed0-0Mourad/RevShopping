@@ -10,8 +10,16 @@ def get_nodes_edges(shopping_r: dict)-> list:
     BtechURL = []
     i= -1
     revs = 0
-    for result in shopping_r:
-        node = result["source"]
+    for r, result in enumerate(shopping_r):
+        try:
+            node = result["source"]
+        except KeyError: 
+            del shopping_r[r]
+            continue
+        price = result['extracted_price']
+        if price == None: 
+            del shopping_r[r]
+            continue
         if node == "B.TECH":
             try:
                 curr_revs = result['reviews']
@@ -23,7 +31,7 @@ def get_nodes_edges(shopping_r: dict)-> list:
                 BtechURL.append(result['link'])
                 revs = curr_revs
         
-        p = f"{result['position']}- " + "{:,}".format(result['extracted_price']) + " EGP"
+        p = f"{result['position']}- " + "{:,}".format(price) + " EGP"
         
         try:
             rate = result["rating"]
@@ -41,7 +49,7 @@ def get_nodes_edges(shopping_r: dict)-> list:
             relations[node].append(p)
             all_weights.append(list())
             i= len(relations) -1
-            all_weights[i].append(rate/num_reviews)
+            all_weights[i].append(rate*num_reviews)
     
     node2edges = list(relations.items())
     if len(BtechURL) == 0:
@@ -59,7 +67,7 @@ def graph_obj(mapp: tuple, weights:list)-> nx.graph:
     
     for i, edge in enumerate(prods):
         G.add_node(edge, size = 4800, color = '#56BF81', edge_weight = weights[i])
-        G.add_edge(node, edge, width = 3000)
+        G.add_edge(node, edge)
     return G
 
 def norm(weights: list)->list:
@@ -67,9 +75,11 @@ def norm(weights: list)->list:
     mini = min(weights)
     maxi = max(weights)
     deno = maxi-mini
-    if deno == 0: return weights
 
     for weight in weights:
+        if deno == 0: 
+            normalized.append(1)
+            continue
         normalized.append((weight - mini)/deno)
     return normalized
 
@@ -90,7 +100,7 @@ def draw_G(G: nx.graph, centeral_node: str, weights: list):
     x.margins(0.20)
     plt.axis(False)
     try:
-        plt.savefig(f"{centeral_node}.png", dpi = 700)
+        plt.savefig(f"{centeral_node}.png", dpi = 300)
     except OSError:
         return
     # plt.show()
@@ -122,7 +132,7 @@ def plot_networks(uniq_sources: list[str], cnt:int):
         plt.axis(False)
         plt.imshow(img)
     # plt.show()
-    plt.savefig("network.png", dpi = 700)
+    plt.savefig("network.png", dpi = 300)
     img = cv2.imread("network.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     fig = px.imshow(img, title= "Shops and thier offered prices")
